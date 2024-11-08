@@ -1,0 +1,28 @@
+# docker-compose.yml
+services:
+  redis:
+    image: "redis:latest"
+    container_name: "cab_redis"
+    ports:
+      - "6379:6379" 
+  
+  backend:
+    build: ./backend
+    container_name: "cab_backend"
+    environment:
+      - PORT=4000
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "4000:4000"
+    depends_on:
+      - redis
+
+  frontend:
+    build: ./frontend
+    container_name: "cab_frontend"
+    environment:
+      - PORT=5173
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
